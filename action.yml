@@ -1,0 +1,10 @@
+name: 'Detekt all'
+description: 'This action can be used to run detekt checks to enforce best practices.'
+author: 'natiginfo'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'check-square'
+  color: 'green'
