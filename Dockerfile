@@ -1,16 +1,7 @@
-# Container image
-FROM alpine
+FROM openjdk:jre-slim
 
-RUN apk --no-cache --update add git bash openjdk11 \
-    && rm -rf /var/cache/apk/*
+ADD https://github.com/detekt/detekt/releases/download/v1.8.0/detekt /usr/local/bin/detekt
+RUN chmod +x /usr/local/bin/detekt
+RUN cd $GITHUB_WORKSPACE
 
-# Copies detekt-cli files from action repository to the filesystem path `/` of the container
-COPY detekt-cli-1.8.0/bin /bin
-COPY detekt-cli-1.8.0/lib /lib
-RUN chmod a+x ./bin/detekt-cli
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT [ "/entrypoint.sh"]
+ENTRYPOINT ["detekt"]
