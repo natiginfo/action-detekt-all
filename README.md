@@ -20,5 +20,5 @@ on:
          uses: actions/checkout@v2
 
        - name: "detekt"
-         uses: natiginfo/action-detekt-all@v1
+         uses: natiginfo/action-detekt-all@1.8.0
 ```
