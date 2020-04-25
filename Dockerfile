@@ -9,8 +9,5 @@ COPY detekt-cli-1.8.0/bin /bin
 COPY detekt-cli-1.8.0/lib /lib
 RUN chmod a+x ./bin/detekt-cli
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
 # Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT [ "/entrypoint.sh"]
+ENTRYPOINT [ "/bin/detekt-cli"]
