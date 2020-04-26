@@ -2,6 +2,8 @@
 
 GitHub Action for running [detekt](https://github.com/detekt/detekt) checks to enforce best practices. Detekt is a static code analysis tool for Kotlin.
 
+Version of the action is aligned with [detekt versions](https://github.com/detekt/detekt/releases).
+
 ## Example usage
 
 ```
