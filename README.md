@@ -45,7 +45,7 @@ on:
        - name: "detekt"
          uses: natiginfo/action-detekt-all@1.9.1
          with:
-          args: --auto-correct --fail-fast --config detekt.yml
+          args: --fail-fast --config detekt.yml
 ```
 
 You can check available CLI parameters [here](https://detekt.github.io/detekt/cli.html#use-the-cli)
