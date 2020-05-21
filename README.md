@@ -24,3 +24,28 @@ on:
        - name: "detekt"
          uses: natiginfo/action-detekt-all@1.8.0
 ```
+## Usage with [CLI parameters](https://detekt.github.io/detekt/cli.html#use-the-cli)
+
+
+```
+name: detekt
+
+on:
+  push:
+    branches: [ master ]
+
+ jobs:
+   detekt:
+     runs-on: ubuntu-latest
+
+     steps:
+       - name: "checkout"
+         uses: actions/checkout@v2
+
+       - name: "detekt"
+         uses: natiginfo/action-detekt-all@1.8.0
+         with:
+          args: --auto-correct --fail-fast --config detekt.yml
+```
+
+You can check available CLI parameters [here](https://detekt.github.io/detekt/cli.html#use-the-cli)
