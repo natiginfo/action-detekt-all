@@ -16,6 +16,8 @@ jobs:
           python-version: 3.8
       - name: Install dependencies
         run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           python -m pip install --upgrade pip
           if [ -f .release-manager/requirements.txt ]; then pip install -r .release-manager/requirements.txt; fi
       - name: Run script
