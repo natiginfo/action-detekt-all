@@ -21,7 +21,7 @@ def create_release(previous_version: str, next_version: str):
     # Update previous version in Dockerfile
     replace_version_string('Dockerfile', f'v{previous_version}', next_version)
     # Update version in README.md
-    replace_version_string('README.md', previous_version, next_version)
+    replace_version_string('README.md', previous_version, next_version[1:])
     # Commit changes
     repo.git.commit('-am', f'Prepare for release {next_version[1:]}.')
     # Remove 'v' prefix and create tag
