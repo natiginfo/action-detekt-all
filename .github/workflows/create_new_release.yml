@@ -1,0 +1,22 @@
+name: Create Release
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  check_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f .release-manager/requirements.txt ]; then pip install -r .release-manager/requirements.txt; fi
+      - name: Run script
+        run: |
+          python .release-manager/create_release.py
