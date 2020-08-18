@@ -26,7 +26,6 @@ on:
 ```
 ## Usage with [CLI parameters](https://detekt.github.io/detekt/cli.html#use-the-cli)
 
-
 ```
 name: detekt
 
