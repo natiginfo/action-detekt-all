@@ -2,6 +2,8 @@ name: Create PR when new release branch is created
 
 on:
   push:
+    branches-ignore:
+      - master
 
 jobs:
   auto-pull-request:
