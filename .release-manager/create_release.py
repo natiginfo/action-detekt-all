@@ -20,6 +20,7 @@ def create_release(previous_version: str, next_version: str):
     release_branch.checkout()
     # Update previous version in Dockerfile
     replace_version_string('Dockerfile', f'v{previous_version}', next_version)
+    replace_version_string('Dockerfile', f'{previous_version}', next_version)
     # Update version in README.md
     replace_version_string('README.md', previous_version, next_version[1:])
     # Commit changes
