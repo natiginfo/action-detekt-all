@@ -1,6 +1,6 @@
 FROM openjdk:jre-slim
 
-ADD https://github.com/detekt/detekt/releases/download/v1.18.0/detekt-cli-1.18.0-all.jar /usr/local/bin/detekt-cli-all.jar
+ADD https://github.com/detekt/detekt/releases/download/v1.18.1/detekt-cli-1.18.1-all.jar /usr/local/bin/detekt-cli-all.jar
 RUN chmod +x /usr/local/bin/detekt-cli-all.jar
 RUN cd $GITHUB_WORKSPACE
 
