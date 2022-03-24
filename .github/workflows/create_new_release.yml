@@ -23,3 +23,10 @@ jobs:
       - name: Run script
         run: |
           python .release-manager/create_release.py
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: New release
+          title: New release
+          branch: ${{ github.ref }}
+          base: master
