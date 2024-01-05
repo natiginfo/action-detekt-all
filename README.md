@@ -6,7 +6,7 @@ Version of the action is aligned with [detekt versions](https://github.com/detek
 
 ## Example usage
 
-```
+```yaml
 name: detekt
 
 on:
@@ -27,7 +27,7 @@ on:
 ## Usage with [CLI parameters](https://detekt.github.io/detekt/cli.html#use-the-cli)
 
 
-```
+```yaml
 name: detekt
 
 on:
@@ -45,7 +45,7 @@ on:
        - name: "detekt"
          uses: natiginfo/action-detekt-all@1.23.4
          with:
-          args: --fail-fast --config detekt.yml
+          args:  --config detekt.yml
 ```
 
 You can check available CLI parameters [here](https://detekt.github.io/detekt/cli.html#use-the-cli)
