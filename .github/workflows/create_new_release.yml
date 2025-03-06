@@ -24,9 +24,8 @@ jobs:
         run: |
           python .release-manager/create_release.py
       - name: Create PR
-        uses: peter-evans/create-pull-request@v4
-        with:
-          commit-message: New release
-          title: New release
-          branch: ${{ github.ref }}
-          base: master
+        uses: vsoch/pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_PREFIX: "RELEASE-"
+          PULL_REQUEST_BRANCH: "master"
