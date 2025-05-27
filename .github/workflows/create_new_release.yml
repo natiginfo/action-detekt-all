@@ -22,8 +22,8 @@ jobs:
           release_needed=true
           echo "detekt_version=$detekt_version"
           echo "detekt_all_version=$detekt_all_version"
-          if [ "$detekt_version" == "$detekt_all_version"]; then
-            release_needed=true;
+          if [ "$detekt_version" == "$detekt_all_version" ]; then
+            release_needed=false;
           fi
           echo "release-needed=$release_needed" >> $GITHUB_ENV
           echo "detekt-version=$detekt_version" >> $GITHUB_ENV
