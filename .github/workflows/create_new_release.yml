@@ -8,18 +8,49 @@ on:
 jobs:
   check_release:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - name: Install dependencies
+
+      - name: check if new release is needed
+        id: release-needed
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          python -m pip install --upgrade pip
-          if [ -f .release-manager/requirements.txt ]; then pip install -r .release-manager/requirements.txt; fi
-      - name: Run script
+          detekt_version=$(gh api repos/detekt/detekt/tags --jq '.[0].name' | cut -c 2-)
+          detekt_all_version=$(gh api repos/natiginfo/action-detekt-all/tags --jq '.[1].name')
+          release_needed=true
+          echo "detekt_version=$detekt_version"
+          echo "detekt_all_version=$detekt_all_version"
+          if [ "$detekt_version" == "$detekt_all_version" ]; then
+            release_needed=false;
+          fi
+          echo "release-needed=$release_needed" >> $GITHUB_OUTPUT
+          echo "detekt-version=$detekt_version" >> $GITHUB_OUTPUT
+          echo "detekt-all-version=$detekt_all_version" >> $GITHUB_OUTPUT
+        
+      - name: create new release
+        if: steps.release-needed.outputs.release-needed == 'true'
+        env:
+          DETEKT_VERSION: ${{ steps.release-needed.outputs.detekt-version }}
+          DETEKT_ALL_VERSION: ${{ steps.release-needed.outputs.detekt-all-version }}
         run: |
-          python .release-manager/create_release.py
+          echo "Creating new release for ${DETEKT_VERSION}"
+          # Configure Git user
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          # create branch
+          git checkout -b "release-${DETEKT_VERSION}"
+          # update detekt-all-version with detekt-version in README.md
+          sed -i "s/${DETEKT_ALL_VERSION}/${DETEKT_VERSION}/g" README.md
+          # update detekt-all-version with detekt-version in Dockerfile
+          sed -i "s/${DETEKT_ALL_VERSION}/${DETEKT_VERSION}/g" Dockerfile
+          # commit changes
+          git add README.md Dockerfile
+          git commit -m "Update detekt-all version to ${DETEKT_VERSION}"
+          # push changes
+          git push origin "release-${DETEKT_VERSION}"
+          # create pull request and automatically merge it
+          gh pr create --base main --head "release-${DETEKT_VERSION}" --title "Update detekt-all version to ${DETEKT_VERSION}" --body "Automatically created release for detekt version ${DETEKT_VERSION}"
+          gh pr merge --auto --squash --delete-branch --admin
+          # create a new release
+          gh release create "${DETEKT_VERSION}" --title "${DETEKT_VERSION}" --notes "Version ${DETEKT_VERSION}"
