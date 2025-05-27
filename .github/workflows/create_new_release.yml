@@ -16,16 +16,32 @@ jobs:
       - name: check if new release is needed
         id: release-needed
         run: |
-          detekt_release=$(gh api repos/detekt/detekt/tags --jq '.[0].name' | cut -c 2-)
-          detekt_all_release=$(gh api repos/natiginfo/action-detekt-all/tags --jq '.[1].name')
+          detekt_version=$(gh api repos/detekt/detekt/tags --jq '.[0].name' | cut -c 2-)
+          detekt_all_version=$(gh api repos/natiginfo/action-detekt-all/tags --jq '.[1].name')
           release_needed=false
-          if [ "$detekt_release" == "$detekt_all_release"]; then
+          echo "detekt_version=$detekt_version"
+          echo "detekt_all_version=$detekt_all_version"
+          if [ "$detekt_version" == "$detekt_all_version"]; then
             release_needed=true;
           fi
           echo "release-needed=$release_needed" >> $GITHUB_ENV
-          echo "detekt-release=$detekt_release" >> $GITHUB_ENV
+          echo "detekt-version=$detekt_version" >> $GITHUB_ENV
+          echo "detekt-all-version=$detekt_all_version" >> $GITHUB_ENV
         
       - name: create new release
         if: steps.release-needed.outputs.release-needed == 'true'
         run: |
           echo "Creating new release for ${{ steps.release-needed.outputs.detekt_release }}"
+          # create branch
+          git checkout -b "release-${{ steps.release-needed.outputs.detekt_version }}"
+          # update detekt-all-version with detekt-version in README.md
+          sed -i "s/${ steps.release-needed.outputs.detekt_all_version }/${{ steps.release-needed.outputs.detekt_version }}/g" README.md
+          # update detekt-all-version with detekt-version in Dockerfile
+          sed -i "s/${ steps.release-needed.outputs.detekt_all_version }/${{ steps.release-needed.outputs.detekt_version }}/g" Dockerfile
+          # commit changes
+          git add README.md Dockerfile
+          git commit -m "Update detekt-all version to ${{ steps.release-needed.outputs.detekt_version }}"
+          # push changes
+          git push origin "release-${{ steps.release-needed.outputs.detekt_version }}"
+          # create pull request
+          gh pr create --base main --head "release-${{ steps.release-needed.outputs.detekt_version }}" --title "Update detekt-all version to ${{ steps.release-needed.outputs.detekt_version }}" --body "This PR updates the detekt-all version to ${{ steps.release-needed.outputs.detekt_version }}."
