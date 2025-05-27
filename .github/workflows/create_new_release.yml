@@ -17,6 +17,7 @@ jobs:
         id: release-needed
         run: |
           detekt_version=$(gh api repos/detekt/detekt/tags --jq '.[0].name' | cut -c 2-)
+          detekt_version="1.23.9" # hardcoded for testing purposes
           detekt_all_version=$(gh api repos/natiginfo/action-detekt-all/tags --jq '.[1].name')
           release_needed=false
           echo "detekt_version=$detekt_version"
