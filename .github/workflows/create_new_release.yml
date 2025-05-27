@@ -31,18 +31,21 @@ jobs:
         
       - name: create new release
         if: steps.release-needed.outputs.release-needed == 'true'
+        env:
+          DETEKT_VERSION: ${{ steps.release-needed.outputs.detekt-version }}
+          DETEKT_ALL_VERSION: ${{ steps.release-needed.outputs.detekt-all-version }}
         run: |
-          echo "Creating new release for ${{ steps.release-needed.outputs.detekt-version }}"
+          echo "Creating new release for ${DETEKT_VERSION}"
           # create branch
-          git checkout -b "release-${{ steps.release-needed.outputs.detekt-version }}"
+          git checkout -b "release-${DETEKT_VERSION}"
           # update detekt-all-version with detekt-version in README.md
-          sed -i "s/${ steps.release-needed.outputs.detekt-all-version }/${{ steps.release-needed.outputs.detekt-version }}/g" README.md
+          sed -i "s/${DETEKT_ALL_VERSION}/${DETEKT_VERSION}/g" README.md
           # update detekt-all-version with detekt-version in Dockerfile
-          sed -i "s/${ steps.release-needed.outputs.detekt-all-version }/${{ steps.release-needed.outputs.detekt-version }}/g" Dockerfile
+          sed -i "s/${DETEKT_ALL_VERSION}/${DETEKT_VERSION}/g" Dockerfile
           # commit changes
           git add README.md Dockerfile
-          git commit -m "Update detekt-all version to ${{ steps.release-needed.outputs.detekt-version }}"
+          git commit -m "Update detekt-all version to ${DETEKT_VERSION}"
           # push changes
-          git push origin "release-${{ steps.release-needed.outputs.detekt-version }}"
+          git push origin "release-${DETEKT_VERSION}"
           # create pull request
-          gh pr create --base main --head "release-${{ steps.release-needed.outputs.detekt-version }}" --title "Update detekt-all version to ${{ steps.release-needed.outputs.detekt-version }}" --body "This PR updates the detekt-all version to ${{ steps.release-needed.outputs.detekt-version }}."
+          gh pr create --base main --head "release-${DETEKT_VERSION}" --title "Update detekt-all version to ${DETEKT_VERSION}" --body "Automatically created release for detekt version ${DETEKT_VERSION}"
