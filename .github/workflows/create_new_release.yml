@@ -10,16 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - name: Install dependencies
+
+      - name: check if new release is needed
+        id: release-needed
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          python -m pip install --upgrade pip
-          if [ -f .release-manager/requirements.txt ]; then pip install -r .release-manager/requirements.txt; fi
-      - name: Run script
+          detekt_release=$(gh api repos/detekt/detekt/tags --jq '.[0].name' | cut -c 2-)
+          detekt_all_release=$(gh api repos/natiginfo/action-detekt-all/tags --jq '.[1].name')
+          release_needed=false
+          if [ "$detekt_release" == "$detekt_all_release"]; then
+            release_needed=true;
+          fi
+          echo "release-needed=$release_needed" >> $GITHUB_ENV
+          echo "detekt-release=$detekt_release" >> $GITHUB_ENV
+        
+      - name: create new release
+        if: steps.release-needed.outputs.release-needed == 'true'
         run: |
-          python .release-manager/create_release.py
+          echo "Creating new release for ${{ steps.release-needed.outputs.detekt_release }}"
