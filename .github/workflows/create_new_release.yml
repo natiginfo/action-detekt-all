@@ -25,9 +25,9 @@ jobs:
           if [ "$detekt_version" == "$detekt_all_version" ]; then
             release_needed=false;
           fi
-          echo "release-needed=$release_needed" >> $GITHUB_ENV
-          echo "detekt-version=$detekt_version" >> $GITHUB_ENV
-          echo "detekt-all-version=$detekt_all_version" >> $GITHUB_ENV
+          echo "release-needed=$release_needed" >> $GITHUB_OUTPUT
+          echo "detekt-version=$detekt_version" >> $GITHUB_OUTPUT
+          echo "detekt-all-version=$detekt_all_version" >> $GITHUB_OUTPUT
         
       - name: create new release
         if: steps.release-needed.outputs.release-needed == 'true'
