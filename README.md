@@ -22,7 +22,7 @@ on:
          uses: actions/checkout@v2
 
        - name: "detekt"
-         uses: natiginfo/action-detekt-all@1.23.8
+         uses: natiginfo/action-detekt-all@2.0.0-alpha.0
 ```
 ## Usage with [CLI parameters](https://detekt.github.io/detekt/cli.html#use-the-cli)
 
@@ -43,7 +43,7 @@ on:
          uses: actions/checkout@v2
 
        - name: "detekt"
-         uses: natiginfo/action-detekt-all@1.23.8
+         uses: natiginfo/action-detekt-all@2.0.0-alpha.0
          with:
           args:  --config detekt.yml
 ```
