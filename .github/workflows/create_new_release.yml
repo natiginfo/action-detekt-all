@@ -51,6 +51,6 @@ jobs:
           git push origin "release-${DETEKT_VERSION}"
           # create pull request and automatically merge it
           gh pr create --base main --head "release-${DETEKT_VERSION}" --title "Update detekt-all version to ${DETEKT_VERSION}" --body "Automatically created release for detekt version ${DETEKT_VERSION}"
-          gh pr merge --auto --squash --delete-branch --admin
+          gh pr merge --squash --delete-branch --admin
           # create a new release
           gh release create "${DETEKT_VERSION}" --title "${DETEKT_VERSION}" --notes "Version ${DETEKT_VERSION}"
