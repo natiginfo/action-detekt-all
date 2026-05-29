@@ -1,0 +1,44 @@
+name: Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test-success:
+    name: Detekt passes on valid fixture
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run detekt (expect pass)
+        uses: ./
+        with:
+          detekt-version: '2.0.0-alpha.3'
+          java-distribution: 'temurin'
+          java-version: '17'
+          args: '--input test-fixtures/valid'
+
+  test-failure:
+    name: Detekt fails on invalid fixture
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run detekt (expect failure)
+        id: detekt-should-fail
+        uses: ./
+        continue-on-error: true
+        with:
+          detekt-version: '2.0.0-alpha.3'
+          java-distribution: 'temurin'
+          java-version: '17'
+          args: '--input test-fixtures/invalid'
+
+      - name: Assert detekt failed
+        if: steps.detekt-should-fail.outcome != 'failure'
+        shell: bash
+        run: |
+          echo "Expected detekt to fail on invalid fixture but it succeeded"
+          exit 1
