@@ -1,3 +1,6 @@
-fun calculate(): Int {
-    return 42
+fun main() {
+    try {
+        println("Hello")
+    } catch (e: Exception) {
+    }
 }
