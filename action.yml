@@ -2,9 +2,38 @@ name: 'Detekt all'
 description: 'This action can be used to run detekt checks to enforce best practices.'
 author: 'natiginfo'
 
+inputs:
+  detekt-version:
+    description: 'Version of detekt CLI to use. No "v" prefix (e.g. 2.0.0-alpha.3). See https://github.com/detekt/detekt/releases'
+    required: true
+  java-distribution:
+    description: 'Java distribution for actions/setup-java (e.g. temurin, corretto, zulu). See https://github.com/actions/setup-java#supported-distributions'
+    required: true
+  java-version:
+    description: 'Java version to use (e.g. 17, 21)'
+    required: true
+  args:
+    description: 'CLI arguments to pass to detekt. See https://detekt.dev/docs/gettingstarted/cli'
+    required: false
+    default: ''
+
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: composite
+  steps:
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: ${{ inputs.java-distribution }}
+        java-version: ${{ inputs.java-version }}
+
+    - name: Download detekt CLI
+      shell: bash
+      run: curl -sSLo "${{ runner.temp }}/detekt-cli-all.jar" "https://github.com/detekt/detekt/releases/download/v${{ inputs.detekt-version }}/detekt-cli-${{ inputs.detekt-version }}-all.jar"
+
+    - name: Run detekt
+      shell: bash
+      run: java -jar "${{ runner.temp }}/detekt-cli-all.jar" ${{ inputs.args }}
+
 branding:
   icon: 'check-square'
   color: 'green'
