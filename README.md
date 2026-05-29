@@ -2,6 +2,14 @@
 
 GitHub Action for running [detekt](https://github.com/detekt/detekt) checks to enforce best practices. Detekt is a static code analysis tool for Kotlin.
 
+## Versioning
+
+Starting with `v3`, the action has its own version — independent of detekt releases. You choose which detekt version to run via the `detekt-version` input. This means:
+
+- No more waiting for a new action release just because detekt released
+- You control the detekt version, Java version, and Java distribution
+- Pin to `@v3` for the latest improvements, or `@v3.x.y` for a specific release
+
 ## Inputs
 
 | Input | Required | Description |
