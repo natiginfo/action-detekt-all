@@ -1,13 +1,18 @@
 # Releasing
 
- Pull requests for new releases are automatically made by [Create Release workflow](./.github/workflows/create_new_release.yml).
+## Versioning
 
-If you want to make a new release manually, you can follow the steps below:
+This action uses its own semantic versioning (`v3.x.y`), decoupled from detekt releases. The `v3` floating tag always points to the latest `3.x.y` release.
 
- 1. If there is a new release of [detekt](https://github.com/detekt/detekt/releases), update `Dockerfile` and `README.md` with correct version number. Make sure you do not add `v` prefix.
- 2. `git checkout -b RELEASE-vX.Y.Z` (where X.Y.Z is the new version)
- 3. `git commit -am "Prepare for release X.Y.Z."` (where X.Y.Z is the new version)
- 4. `git tag -a X.Y.Z -m "Version X.Y.Z"` (where X.Y.Z is the new version)
- 5. `git push && git push --tags`
- 6. Review the automatically created [pull request](https://github.com/natiginfo/action-detekt-all/pulls) for new release branch and merge it to master.
- 7. Navigate to the [releases](https://github.com/natiginfo/action-detekt-all/releases) page and publish latest draft release.
+Release when: action behaviour changes, new inputs added, bugs fixed.
+
+## Creating a Release
+
+ 1. Update `action.yml` if needed (e.g. bump `actions/setup-java` version).
+ 2. Update `README.md` examples if any inputs changed.
+ 3. `git checkout -b release-vX.Y.Z`
+ 4. Commit changes using the `commit` skill.
+ 5. `git tag -a vX.Y.Z -m "Version vX.Y.Z"`
+ 6. Move the floating major tag: `git tag -fa v3 -m "Update v3 to vX.Y.Z"`
+ 7. `git push && git push --tags --force`
+ 8. Navigate to [releases](https://github.com/natiginfo/action-detekt-all/releases) and publish the draft release.
